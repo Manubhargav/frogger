@@ -12,8 +12,11 @@ var Enemy = function(x, y) {
     this.y = y;
     // The speed of the enemies. Some enemies can be
     //faster than others, uses random function.
-    this.speed = getRandomInt(100,200);
+    this.speed = this.getRandomInt(100,200);
 };
+
+var TILE_WIDTH = 101,
+    TILE_HEIGHT = 83;
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -23,15 +26,15 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     this.x += this.speed * dt; // moves the enemy along x-axis
 
-    if(this.x > 606) {
-        this.x = -101;
-        this.speed = getRandomInt(100,200);
+    if(this.x > 6 * TILE_WIDTH) {
+        this.x = -TILE_WIDTH;
+        this.speed = this.getRandomInt(100,200);
     }
 
     //Handle collision with the Player
     //101x101 is the size of a tile, this checks if this(enemy).x & player.y co-ordinates
     //are same as player.x and player.y co-ordinates that check if they collide.
-    if(Math.abs(this.x - player.x) < 101 && Math.abs(this.y - player.y) < 83) {
+    if(Math.abs(this.x - player.x) < TILE_WIDTH && Math.abs(this.y - player.y) < TILE_HEIGHT) {
     player.reset();
     score.updateMiss();
   }
@@ -44,7 +47,7 @@ Enemy.prototype.render = function() {
 };
 
 // Get Random Integer Function 
-function getRandomInt(min, max) {
+Enemy.prototype.getRandomInt = function(min, max) {
   return Math.floor((Math.random() * (max - min + 1)) + min);
 };
 
@@ -53,39 +56,39 @@ function getRandomInt(min, max) {
 // a handleInput() method.
 
 var Player = function() {
-  //Loading the image to the appropriate player image 
-  this.sprite = 'images/char-boy.png';
-  // Setting the Player initial location
-  this.reset();
+	//Loading the image to the appropriate player image 
+	this.sprite = 'images/char-boy.png';
+	// Setting the Player initial location
+	this.reset();
 };
 
 //Update method for the player.
 
 Player.prototype.update = function() {
-  // Stop player from goint out of the given frame 
-  if(this.col < 0) {
-    this.col = 0;
-  }
+	// Stop player from goint out of the given frame 
+	if(this.col < 0) {
+	this.col = 0;
+	}
 
-  // Stop player from goint out of the given frame
-  if(this.col > 4) {
-    this.col = 4;
-  }
+	// Stop player from goint out of the given frame
+	if(this.col > 4) {
+	this.col = 4;
+	}
 
-  // Stop player from goint out of the given frame 
-  if(this.row > 5) {
-    this.row = 5;
-  }
+	// Stop player from goint out of the given frame 
+	if(this.row > 5) {
+	this.row = 5;
+	}
 
-  // Reset the player's position if the player has reached the water
-  if(this.row == 0) {
-    this.reset();
-    // Update the score if player reaches water
-    score.updateSuccess();
-  }
+	// Reset the player's position if the player has reached the water
+	if(this.row == 0) {
+	this.reset();
+	// Update the score if player reaches water
+	score.updateSuccess();
+	}
 
-  this.x = this.col * 101;
-  this.y = this.row * 83;
+	this.x = this.col * TILE_WIDTH;
+	this.y = this.row * TILE_HEIGHT;
 };
 
 // Render method for the player.
@@ -96,42 +99,42 @@ Player.prototype.render = function() {
 
 // Handle User pressed input for controlling the player
 Player.prototype.handleInput = function(key) {
-  switch(key) {
-    case 'left': this.col--;
-      break;
-    case 'right': this.col++;
-      break;
-    case 'up': this.row--;
-      break;
-    case 'down': this.row++;
-      break;
-  }
+	switch(key) {
+	case 'left': this.col--;
+	  break;
+	case 'right': this.col++;
+	  break;
+	case 'up': this.row--;
+	  break;
+	case 'down': this.row++;
+	  break;
+	}
 };
 
 // Reset method to reset the user to initial position
 Player.prototype.reset = function() {
-  this.col = 2;
-  this.row = 5;
-  this.x = this.col * 101;
-  this.y = this.row * 83;
+	this.col = 2;
+	this.row = 5;
+	this.x = this.col * TILE_WIDTH;
+	this.y = this.row * TILE_HEIGHT;
 };
 
 // Score class for keeping track of User-score
 var Score = function() {
-  this.success = 0;
-  this.miss = 0;
+	this.success = 0;
+	this.miss = 0;
 };
 
 // Update Score by manipuating DOM element with appropriate id.
 Score.prototype.updateSuccess = function() {
-  this.success += 1;
-  document.getElementById('score').innerHTML = this.success;
+	this.success += 1;
+	document.getElementById('score').innerHTML = this.success;
 };
 
 // Update Failed attempts by manipuating DOM element with appropriate id.
 Score.prototype.updateMiss = function() {
-  this.miss += 1;
-  document.getElementById('fail').innerHTML = this.miss;
+	this.miss += 1;
+	document.getElementById('fail').innerHTML = this.miss;
 };
 
 
@@ -148,7 +151,7 @@ var score = new Score();
 // placing them in an array called allEnemies
 var allEnemies = [];
 for(var i = 0; i < 3; i++) {
-  allEnemies.push(new Enemy(i*101, (i+1)*83));
+	allEnemies.push(new Enemy(i*101, (i+1)*83));
 }
 
 // This listens for key presses and sends the keys to your
