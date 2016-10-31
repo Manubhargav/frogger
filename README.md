@@ -2,7 +2,7 @@
 Frogger - Game using JavaScript Game engine.
 ===============================
 
-## Repositor Structure
+## Repository Structure
 
 The repository contains css, images, and js folders, as well as an index.html and a README.md file. Once you have downloaded the files we have provided, you will have to edit app.js to build the game.
 
